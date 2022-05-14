@@ -76,39 +76,3 @@ function renderCities() {
     //use cards
     //append 5 day forcast
     
-    function callWeatherApi() {
-        // Get lat + long coordinates first 
-        let userSearch = document.querySelector("#location-search").value;
-        let coordinateUrl = "http://api.openweathermap.org/geo/1.0/direct?q=" + userSearch + "&limit=1&appid=" + APIkey;
-      
-        fetch(coordinateUrl)
-          .then(function (response) {
-            // Add modal to alert user if city name cannot be found 
-            if (!response.ok) {
-              return;
-            }
-            return response.json();
-          })
-          .then(function (data) {
-            console.log(data);
-            let lat = data[0].lat
-            let long = data[0].lon
-            let cityName = data[0].name
-            displayCityName(cityName);
-            addSearchHistory(cityName);
-      
-            let oneCallUrl = "https://api.openweathermap.org/data/2.5/onecall?lat=" + lat + "&lon=" + long + "&units=imperial&exclude=hourly,minutely&appid=" + APIkey;
-      
-            fetch(oneCallUrl)
-              .then(function (response) {
-                return response.json()
-              })
-              .then(function (data) {
-                // display results on page SOMEHOW
-                printResults(data);
-      
-              })
-          }
-          );
-      
-      };
