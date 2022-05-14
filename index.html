@@ -5,6 +5,10 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Weather Dashboard</title>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    />
     <link rel="stylesheet" href="./assets/style.css">
 </head>
 <body>
@@ -17,12 +21,12 @@
     <main>
         <section class="search-container">
             <div class="search">
-                <form>
+                <form id="user-form">
                     <h3>search for city:</h3>
-                    <input type="text" class="search-bar" placeholder="enter city...">
+                    <input id="search-city" type="text" placeholder="enter city...">
                     <button id="search-button" class="btn btn-primary">search</button>
                 </form>
-                <div class="recent-search">
+                <div class="search-history">
                     <ul id="city-results">yooooo</ul>
                 </div>
             </div>
