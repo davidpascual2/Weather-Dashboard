@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Dashboard</title>
+    <link rel="stylesheet" href="./assets/style.css">
+</head>
+<body>
+    <header>
+        <div class="header">
+            <h1>Weather Dashboard</h1>
+        </div>
+    </header>
+
+    <main>
+        <section class="search-container">
+            <div class="search">
+                <form>
+                    <h3>search for city:</h3>
+                    <input type="text" class="search-bar" placeholder="enter city...">
+                    <button id="search-button" class="btn btn-primary">search</button>
+                </form>
+                <div class="recent-search">
+                    <ul id="city-results">yooooo</ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="weather-container">
+            <div class="current-weather">insert city name here</div>
+            <div class="forecast">5-day forcast</div>
+        </section>
+    </main>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="./assets/script.js"></script>
+</body>
+</html>
