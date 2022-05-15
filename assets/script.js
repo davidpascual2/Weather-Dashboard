@@ -39,6 +39,7 @@ function callWeatherAPI(event) {
         let cityName = response[0].name
         console.log(lat, lon)
         displayWeather(cityName);
+        // console.log(response)
         
         
         let apiURL = `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude=current,minutely,hourly,alerts&units=imperial&appid=${APIKey}`;
@@ -51,7 +52,7 @@ function callWeatherAPI(event) {
         
             .then(function (response) {
                 console.log(response) //display function????
-                displayWeather(response)
+                // displayWeather(cityName)
             })
         
     })
@@ -65,8 +66,9 @@ function callWeatherAPI(event) {
 let cityName =document.createElement("h2")
 
 function displayWeather(cityName) {
-//     currentWeatherEl.innerHTML = "";
-//     cityName.classList.add("#searched-city");
+    console.log(cityName)
+    searchedCityEl.innerHTML = "";
+    cityName.classList.add("#searched-city");
     
 
 
