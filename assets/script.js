@@ -16,17 +16,17 @@ buttonEl.addEventListener("click", callWeatherAPI);
 //use fetch request to get current condtions on open weather maps (url fed to fetch)
 function callWeatherAPI(event) {
     event.preventDefault() //without this error uncaught can occur
-    let searchCity = document.querySelector("#search-input").value; //value extracts value from html input
-        console.log(searchCity)
+    let citySearch = inputEl.value.trim(); //value extracts value from html input  // used to be: document.querySelector("#search-input").value;
+        console.log(citySearch)
+        inputEl.value = ""; //clears out usersearch input after search is clicked // SHOULD THIS BE PLACED HERE?
         
-    let latLonAPI = `http://api.openweathermap.org/geo/1.0/direct?q=${searchCity}&limit=1&appid=${APIKey}`;
+    let latLonAPI = `http://api.openweathermap.org/geo/1.0/direct?q=${citySearch}&limit=1&appid=${APIKey}`;
 
     fetch(latLonAPI)
         .then(function(response){
         // console.log(response)
         if(response.ok) {
             return response.json();
-
         } 
         // else {
         //     // alert("error") //fix
@@ -62,6 +62,7 @@ function callWeatherAPI(event) {
         // alert("unable to connect")
         console.log(error)
     });
+
 }
 
 
@@ -96,6 +97,7 @@ function recentSearches(name) {
     userSearchHistory.append(recentSearchButton);
     //append new created element to search history element
     searchHistoryEl.append(userSearchHistory);
+    
 
     
     
