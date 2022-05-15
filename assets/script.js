@@ -73,7 +73,7 @@ function displayWeather(cityName) {
     
     
 
-// }
+}
 //create function to display 5 day forcast 
 function fiveDayForcast() {
 
