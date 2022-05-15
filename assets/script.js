@@ -4,7 +4,7 @@ var userFormEl = document.querySelector("#user-form")
 
 var inputEl = document.querySelector("#search-input"); //coment out? id already defined elsewhere
 var buttonEl = document.querySelector("#search-button");
-var searchHistoryEl = document.querySelector(".search-history");
+var searchHistoryEl = document.querySelector("#search-history");
 var currentWeatherEl = document.querySelector(".current-weather");
 var searchedCityEl = document.querySelector("#searched-city");
 var fiveDayForecastEl = document.querySelector(".five-day-forecast");
@@ -25,7 +25,8 @@ function callWeatherAPI(event) {
         .then(function(response){
         // console.log(response)
         if(response.ok) {
-            return response.json()
+            return response.json();
+
         } 
         // else {
         //     // alert("error") //fix
@@ -63,17 +64,15 @@ function callWeatherAPI(event) {
     });
 }
 
-let cityName =document.createElement("h2")
 
-function displayWeather(cityName) {
-    console.log(cityName)
+// ask tutor about this function 
+function displayWeather(name) {
     searchedCityEl.innerHTML = "";
-    cityName.classList.add("#searched-city");
-    
-
-
-    
-    
+    let cityNameEl =document.createElement("h2");
+    cityNameEl.classList.add("#searched-city");
+    cityNameEl.textContent = name;
+    searchedCityEl.append(cityNameEl);
+ 
 
 }
 //create function to display 5 day forcast 
@@ -85,7 +84,20 @@ function fiveDayForcast() {
 
 
 //create function to render recently searched cities
-function recentSearches() {
+function recentSearches(name) {
+    let userSearchHistory = document.createElement("li");
+    userSearchHistory.classList.add("list-group-item");
+    //create button for recent searches
+    let recentSearchButton = document.createElement("button");
+    recentSearchButton.textContent = name;
+    //add class to button
+    recentSearchButton.classList.add("recent-search-btn", "btn", "btn-secondary")
+    //append or add button to list
+    userSearchHistory.append(recentSearchButton);
+    //append new created element to search history element
+    searchHistoryEl.append(userSearchHistory);
+
+    
     
 }
     //create array  and loop through
