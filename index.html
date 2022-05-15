@@ -23,7 +23,7 @@
             <div class="search">
                 <form id="user-form">
                     <h3>search for city:</h3>
-                    <input id="search-city" type="text" placeholder="enter city...">
+                    <input id="search-input" type="text" placeholder="enter city...">
                     <button id="search-button" class="btn btn-primary">search</button>
                 </form>
                 <div class="search-history">
@@ -33,8 +33,14 @@
         </section>
 
         <section class="weather-container">
-            <div class="current-weather">insert city name here</div>
-            <div class="forecast">5-day forcast</div>
+            <div class="current-weather">
+                <h2 id="searched-city"></h2>
+            </div>
+            
+            <div class="five-day-forecast">
+                <h2>5-Day Forecast</h2>
+                <div id="fiveday-cards" class="d-flex"></div>
+            </div>
         </section>
     </main>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>

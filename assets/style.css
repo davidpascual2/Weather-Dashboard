@@ -11,7 +11,7 @@ body{
 }
 
 .header {
-    background-color: navy;
+    background-color: rgb(83 83 83);
     color: white;
     text-align: center;
     padding:10;
@@ -60,7 +60,7 @@ main {
     height: 45%;
 }
 
-.forecast {
+.five-day-forecast {
     border: 1px solid black;
     height: 45%;
 }
