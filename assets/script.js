@@ -33,17 +33,17 @@ function callWeatherAPI(event) {
         // }
         })
         .then(function (response) {
-        console.log(response)
+        console.log(response) //get city lat and lon
 
         let lat = response[0].lat // "stores" response in variable
         let lon = response[0].lon
         let cityName = response[0].name
         console.log(lat, lon)
-        displayWeather(cityName);
+        displaycityName(cityName); //what does this do?
         // console.log(response)
         
         
-        let apiURL = `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude=current,minutely,hourly,alerts&units=imperial&appid=${APIKey}`;
+        let apiURL = `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude=minutely,hourly,alerts&units=imperial&appid=${APIKey}`;
 
         fetch(apiURL)
             .then(function(response){
@@ -52,8 +52,9 @@ function callWeatherAPI(event) {
             })
         
             .then(function (response) {
-                console.log(response) //display function????
-                // displayWeather(cityName)
+                // console.log(response);
+                printResults(response); 
+                // displaycityName(cityName)
             })
         
     })
@@ -62,31 +63,46 @@ function callWeatherAPI(event) {
         // alert("unable to connect")
         console.log(error)
     });
-
 }
 
 
-// ask tutor about this function 
-function displayWeather(name) {
+ //displays city on webpage...// ask tutor about this function 
+function displaycityName(name) {
     searchedCityEl.innerHTML = "";
-    let cityNameEl =document.createElement("h2");
+    let cityNameEl = document.createElement("h2");
     cityNameEl.classList.add("#searched-city");
     cityNameEl.textContent = name;
     searchedCityEl.append(cityNameEl);
- 
-
-}
-//create function to display 5 day forcast 
-function fiveDayForcast() {
-
 }
 
-//create function to display cities temp, wind, hum, and UV index
+//create function to display current weather conditions
+function printResults(currentWeatherConditions) {
+    console.log(currentWeatherConditions);
 
+    let currentTemp = document.createElement("p");
+    currentTemp.classList.add("card-text");
+    currentTemp.textContent = `Temp: ${currentWeatherConditions.current.temp} F`;
+    currentWeatherEl.append(currentTemp);
 
-//create function to render recently searched cities
+    let currentWind = document.createElement("p");
+    currentWind.classList.add("card-text");
+    currentWind.textContent = `Wind Speed: ${currentWeatherConditions.current.wind_speed} MPH`;
+    currentWeatherEl.append(currentWind);
+
+    let currentHumidity = document.createElement("p");
+    currentHumidity.classList.add("card-text");
+    currentHumidity.textContent = `Humidity: ${currentWeatherConditions.current.humidity}%`;
+    currentWeatherEl.append(currentHumidity);
+
+    let currentUV = document.createElement("p");
+    currentUV.classList.add("card-text");
+    currentUV.textContent = `UV Index: ${currentWeatherConditions.current.uvi}`;
+    currentWeatherEl.append(currentUV);
+}
+
+//create function to render recently searched cities and make button
 function recentSearches(name) {
-    let userSearchHistory = document.createElement("li");
+    let userSearchHistory = document.createElement("li"); //global scope of local scope???
     userSearchHistory.classList.add("list-group-item");
     //create button for recent searches
     let recentSearchButton = document.createElement("button");
@@ -97,25 +113,82 @@ function recentSearches(name) {
     userSearchHistory.append(recentSearchButton);
     //append new created element to search history element
     searchHistoryEl.append(userSearchHistory);
+
+
+    recentSearchButton.addEventListener("click", function(event) {
+        event.preventDefault();
+        let btnClicked = event.target.textContent
+        console.log(btnClicked)
+        let latLonAPI = `http://api.openweathermap.org/geo/1.0/direct?q=${btnClicked}&limit=1&appid=${APIKey}`;
+
+        fetch(latLonAPI)
+            .then(function(response){
+            // console.log(response)
+            if(response.ok) {
+                return response.json();
+            } 
+            // else {
+            //     // alert("error") //fix
+            // }
+            })
+            .then(function (response) {
+            console.log(response)
     
+            let lat = response[0].lat // "stores" response in variable
+            let lon = response[0].lon
+            let cityName = response[0].name
+            console.log(lat, lon)
+            displaycityName(cityName);
+
+            let apiURL = `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude=minutely,hourly,alerts&units=imperial&appid=${APIKey}`;
+
+            fetch(apiURL)
+            .then(function(response){
+                // console.log(response)
+                return response.json()
+            })
+        
+            .then(function (response) {
+                console.log(response)
+                // printResults(response);
+            })
+            })
+
+    });
+};
+
+
+
 
     
-    
-}
-    //create array  and loop through
+    //create class and append 
+
+
+
+//create function to display 5 day forcast
+
+    //create an array and loop through each day
     //use cards
     //append 5 day forcast
-    
 
 
 
+    //print weather from user search 
+// function printResults(currentWeatherResult) {
+//     console.log(currentWeatherResult);
 
-    // <p class="card-text">High Feels like ${
-    //     day.feels_like.day
-    //   }&deg;C</p>
-    //   <p class="card-text">Pressure ${day.pressure}mb</p>
-    //   <p class="card-text">Humidity ${day.humidity}%</p>
-    //   <p class="card-text">UV Index ${day.uvi}</p>
-    //   <p class="card-text">Precipitation ${day.pop * 100}%</p>
-    //   <p class="card-text">Dewpoint ${day.dew_point}</p>
-    //   <p class="card-text">Wind ${day.wind_speed}m/s, ${
+//     let date = currentWeatherResult.current.dt;
+//     console.log(date);
+//     let dateEl = document.createElement("h3");
+//     dateEl.textContent = moment(date, "X").format("M,D,YYYY");
+//     console.log(dateEl);
+
+//     currentWeatherEl.append(dateEl)
+
+// }
+
+
+//temp
+//wind
+//humidity
+//UV index
