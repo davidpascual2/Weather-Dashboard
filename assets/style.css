@@ -48,7 +48,7 @@ main {
     flex-direction: column;
     justify-content:space-around;
     flex: 3;
-    background-color: aqua;
+    /* background-color: aqua; */
     padding: 0 10px;
     height: 100vh;
 
@@ -56,11 +56,11 @@ main {
 }
 
 .current-weather {
-    border: 1px solid black;
+    border: 1px solid #888;
     height: 45%;
 }
 
 .five-day-forecast {
-    border: 1px solid black;
+    border: 1px solid #888;
     height: 45%;
 }
