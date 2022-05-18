@@ -1,15 +1,15 @@
 
 var APIKey = '8635650944450d2222bebb2cadec5082';
 var userFormEl = document.querySelector("#user-form")
-
 var inputEl = document.querySelector("#search-input"); //coment out? id already defined elsewhere
 var buttonEl = document.querySelector("#search-button");
 var searchHistoryEl = document.querySelector("#search-history");
 var currentWeatherEl = document.querySelector(".current-weather");
 var searchedCityEl = document.querySelector("#searched-city");
 var fiveDayForecastEl = document.querySelector("#five-day-forecast");
-
 var SearchHistory = JSON.parse(localStorage.getItem("search")); //????
+
+
 
 // var cityNameEl = document.querySelector(".city-name")
 
@@ -20,24 +20,29 @@ buttonEl.addEventListener("click", callWeatherAPI);
 function callWeatherAPI(event) {
     event.preventDefault() //without this error uncaught can occur
     let citySearch = inputEl.value.trim(); //value extracts value from html input  // used to be: document.querySelector("#search-input").value;
-        console.log(citySearch)
+        console.log("just city name",citySearch)
         inputEl.value = ""; //clears out usersearch input after search is clicked // SHOULD THIS BE PLACED HERE?
 
-        // var cityStorage = localStorage.getItem("city")
+        // var cityStorage = JSON.parse(localStorage.getItem("city"));
 
         // if (JSON.parse(localStorage.getItem("city"))) {
-        //     console.log(cityStorage)
-        //     var cityStorageObject = JSON.parse(localStorage.getItem("city"));
-        //     if (cityStorageObject.length > 5) {
-        //         cityStorageObject.pop();
-        //         cityStorage.unshift(citySearch);
-        //     }else{
-        //         cityStorage.unshift(citySearch);
-        //     }
+        //     console.log("inside if",cityStorage);
+        //     // var cityStorageObject = JSON.parse(localStorage.getItem("city"));
+        //     //if greater than 5 then will be removed
+        //     // if (cityStorageObject.length > 5) {
+        //     //     cityStorageObject.pop(); 
+        //     //     cityStorage.unshift(citySearch);
+        //     // }else{
+        //     //     cityStorage.unshift(citySearch);
+        //     // }
         // }else{
         //     var temp = [];
         //     temp.push(cityStorage)
-        //     localStorage.setItem("city", JSON.stringify(temp));
+        //     localStorage.setItem("city", JSON.stringify(citySearch)); //changed (temp) to (city)
+
+        //     searchHistoryEl.innerHTML = temp;
+        //     console.log("inside of else state search historyEl",searchHistoryEl);
+
         // } 
 
 
@@ -247,18 +252,6 @@ function printResults(currentWeatherConditions) {
 
 //local storage
 //-------------------------------------------------------//
-// function initStorage() {
-//     if (localStorage.getItem("storedArray")){
-//         searchHistoryArray = JSON.parse(localStorage.getItem("storedArray"));
-//     } else {
-//         histArray = [];
-//     }
-// }
-
-// if(city) {
-//     searchHistoryArray.unshift(city.substring(0,1))
-// }
-
 
 
 // buttonEl.addEventListener("click", function() {
@@ -311,4 +304,13 @@ function printResults(currentWeatherConditions) {
 // renderSearchHistory();
 // if (searchHistory.length > 0) {
 //     getWeather(searchHistory[searchHistory.length - 1])
+// }
+
+//---------------
+
+// function handleSavebutton(event) {
+//     event.preventDefault();
+//     localStorage.SetItem("city",JSON.stringify(inputEl.value));
+
+//     nameDisplayCheck();
 // }
