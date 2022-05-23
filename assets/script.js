@@ -7,7 +7,7 @@ var searchHistoryEl = document.querySelector("#search-history");
 var currentWeatherEl = document.querySelector(".current-weather");
 var searchedCityEl = document.querySelector("#searched-city");
 var fiveDayForecastEl = document.querySelector("#five-day-forecast");
-var SearchHistory = JSON.parse(localStorage.getItem("search")); //????
+
 
 
 
@@ -18,33 +18,42 @@ buttonEl.addEventListener("click", callWeatherAPI);
 
 //use fetch request to get current condtions on open weather maps (url fed to fetch)
 function callWeatherAPI(event) {
+
     event.preventDefault() //without this error uncaught can occur
     let citySearch = inputEl.value.trim(); //value extracts value from html input  // used to be: document.querySelector("#search-input").value;
         console.log("just city name",citySearch)
         inputEl.value = ""; //clears out usersearch input after search is clicked // SHOULD THIS BE PLACED HERE?
 
-        // var cityStorage = JSON.parse(localStorage.getItem("city"));
+        //save to local storage
+        var cityStorage = localStorage.getItem("city"); //returns array of local storage
 
-        // if (JSON.parse(localStorage.getItem("city"))) {
-        //     console.log("inside if",cityStorage);
-        //     // var cityStorageObject = JSON.parse(localStorage.getItem("city"));
-        //     //if greater than 5 then will be removed
-        //     // if (cityStorageObject.length > 5) {
-        //     //     cityStorageObject.pop(); 
-        //     //     cityStorage.unshift(citySearch);
-        //     // }else{
-        //     //     cityStorage.unshift(citySearch);
-        //     // }
-        // }else{
-        //     var temp = [];
-        //     temp.push(cityStorage)
-        //     localStorage.setItem("city", JSON.stringify(citySearch)); //changed (temp) to (city)
+        if (cityStorage) { //if local storage is found 
+            
+            var cityStorageObject = JSON.parse(cityStorage); //returns array of local storage
+            // if greater than 5 then will be removed
+            if (cityStorageObject.length > 5) { //if there is not more than 5, will move to "else"
+                cityStorageObject.pop(); //removes last element from array
+                cityStorageObject.unshift(citySearch); //if greater than 5, adds element to beginning of array
+            }else {
+                cityStorageObject.unshift(citySearch); // if less than 5, element will be added to array
+            }
+            localStorage.setItem("city", JSON.stringify(cityStorageObject));
 
-        //     searchHistoryEl.innerHTML = temp;
-        //     console.log("inside of else state search historyEl",searchHistoryEl);
+            renderHistory(cityStorageObject);
 
-        // } 
+        }else{ // if thre is nothing in local storage
+            var searchHistoryList = []; // create array to store values
+            searchHistoryList.push(citySearch) // add to array list
+            localStorage.setItem("city", JSON.stringify(searchHistoryList)); //give object
 
+            searchHistoryEl.innerHTML = searchHistoryList;
+            console.log("inside of else state search historyEl",searchHistoryEl);
+            
+            renderHistory(searchHistoryList);
+        } 
+
+        
+    
 
     let latLonAPI = `http://api.openweathermap.org/geo/1.0/direct?q=${citySearch}&limit=1&appid=${APIKey}`;
 
@@ -89,6 +98,17 @@ function callWeatherAPI(event) {
         // alert("unable to connect")
         console.log(error)
     });
+    
+}
+//function to show search history
+function renderHistory(history) {
+searchHistoryEl.innerHTML = "" // run each time the user searches for something 
+for(i = 0; i < history.length; i++) {
+ var li = document.createElement("li");
+ li.innerText = history[i]
+searchHistoryEl.append(li);
+}
+
 }
 
 
@@ -179,9 +199,21 @@ function printResults(currentWeatherConditions) {
 
     let currentUV = document.createElement("p");
     currentUV.classList.add("card-text");
-    currentUV.textContent = `UV Index: ${currentWeatherConditions.current.uvi}`;
-    currentWeatherEl.append(currentUV);
+    currentUV.textContent = `UV Index: `;
+    let uviColor = document.createElement("span");
+    currentUV.append(uviColor);
+    uviColor.textContent = currentWeatherConditions.current.uvi;
 
+    //if statment that changes the color of UV according to condition
+    if (currentWeatherConditions.current.uvi > 7) {
+        uviColor.classList.add("extreme");
+    } else if (currentWeatherConditions.current.uvi > 3) {
+        uviColor.classList.add("moderate");
+    } if (currentWeatherConditions.current.uvi > 0) {
+        uviColor.classList.add("low");
+    };
+    currentWeatherEl.append(currentUV);
+    
 
     //five day forecast Section
     var forecastSection = document.createElement("div");
@@ -229,7 +261,6 @@ function printResults(currentWeatherConditions) {
 
     }
 }
-// }
     //create an array and loop through each day
     //use cards
     //append 5 day forcast
@@ -308,9 +339,53 @@ function printResults(currentWeatherConditions) {
 
 //---------------
 
-// function handleSavebutton(event) {
-//     event.preventDefault();
-//     localStorage.SetItem("city",JSON.stringify(inputEl.value));
+// var searchHistoryList = []; // var = array
 
-//     nameDisplayCheck();
-// }
+// buttonEl.addEventListener("click", function(event){
+//     event.preventDefault();
+
+//     var city = inputEl.value.trim(); //var city is equal to user input
+//     currentWeatherConditions(city); // (callapifunction)
+
+//     if(!searchHistoryList.includes(city)) {
+//         searchHistoryList.push(city);
+//         var searchedCity = document.querySelector(`<li class="list-group-item">${city}</li>`);
+//         document.querySelector("#search-history").append(searchedCity); // this is refrencing html id. (<ul id="searchHistory" class="list-group">)
+
+//     };
+
+//     localStorage.setItem("city",JSON.stringify(searchHistoryList));
+//     console.log(searchHistoryList)
+// });
+
+// $(document).on("click", ".list-group-item", function() { //document.querySelector(document).addEventListener("click","list-group-item", ListCity)
+//     var listCity = $(this).textContent();
+//     currentCondition(listCity);
+// });
+
+
+
+
+// var cityStorage = JSON.parse(localStorage.getItem("city"));
+
+//         if (JSON.parse(localStorage.getItem("city"))) {
+//             console.log("inside if",cityStorage);
+//             // var cityStorageObject = JSON.parse(localStorage.getItem("city"));
+//             //if greater than 5 then will be removed
+//             // if (cityStorageObject.length > 5) {
+//             //     cityStorageObject.pop(); 
+//             //     cityStorage.unshift(citySearch);
+//             // }else{
+//             //     cityStorage.unshift(citySearch);
+//             // }
+//         }else{
+//             var searchHistoryList = [];
+//             searchHistoryList.push(cityStorage)
+//             localStorage.setItem("city", JSON.stringify(searchHistoryList)); //changed (temp) to (city)
+
+//             searchHistoryEl.innerHTML = searchHistoryList;
+//             console.log("inside of else state search historyEl",searchHistoryEl);
+
+//         } 
+
+
