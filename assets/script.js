@@ -20,7 +20,7 @@ buttonEl.addEventListener("click", callWeatherAPI);
 function callWeatherAPI(event) {
 
     event.preventDefault() //without this error uncaught can occur
-    let citySearch = inputEl.value.trim(); //value extracts value from html input  // used to be: document.querySelector("#search-input").value;
+    let citySearch = inputEl.value.trim() || event.target.innerText //value extracts value from html input  // used to be: document.querySelector("#search-input").value;
         console.log("just city name",citySearch)
         inputEl.value = ""; //clears out usersearch input after search is clicked // SHOULD THIS BE PLACED HERE?
 
@@ -28,15 +28,17 @@ function callWeatherAPI(event) {
         var cityStorage = localStorage.getItem("city"); //returns array of local storage
 
         if (cityStorage) { //if local storage is found 
-            
             var cityStorageObject = JSON.parse(cityStorage); //returns array of local storage
-            // if greater than 5 then will be removed
+            if(!cityStorageObject.includes(citySearch)) {
+                // if greater than 5 then will be removed
             if (cityStorageObject.length > 5) { //if there is not more than 5, will move to "else"
                 cityStorageObject.pop(); //removes last element from array
                 cityStorageObject.unshift(citySearch); //if greater than 5, adds element to beginning of array
             }else {
                 cityStorageObject.unshift(citySearch); // if less than 5, element will be added to array
             }
+            }
+            
             localStorage.setItem("city", JSON.stringify(cityStorageObject));
 
             renderHistory(cityStorageObject);
@@ -101,82 +103,80 @@ function callWeatherAPI(event) {
     
 }
 //function to show search history
-function renderHistory(history) {
-searchHistoryEl.innerHTML = "" // run each time the user searches for something 
-for(i = 0; i < history.length; i++) {
- var li = document.createElement("li");
- li.innerText = history[i]
-searchHistoryEl.append(li);
-}
+// function renderHistory(history) {
+// searchHistoryEl.innerHTML = "" // run each time the user searches for something 
+// for(i = 0; i < history.length; i++) {
+//  var li = document.createElement("li");
+//  li.innerText = history[i]
+// searchHistoryEl.append(li);
+// }
 
+function renderHistory(history) {
+    searchHistoryEl.innerHTML = "" // run each time the user searches for something 
+    for(i = 0; i < history.length; i++) {
+     var li = document.createElement("li");
+     var recentSearchButton = document.createElement("button");
+     recentSearchButton.innerText = history[i]
+     recentSearchButton.classList.add("recent-search-btn", "btn", "btn-secondary")
+    //  li.innerText = history[i]
+    recentSearchButton.addEventListener("click", callWeatherAPI)
+    searchHistoryEl.append(li);
+    searchHistoryEl.append(recentSearchButton);
+    }
+
+    // recentSearchButton.addEventListener("click", function(event) {
+    //     event.preventDefault();
+    //     console.log("hello world!!!!!")
+    //     let btnClicked = event.target.textContent;
+    //     console.log("recent search history button clicked")
+    //     let latLonAPI = `http://api.openweathermap.org/geo/1.0/direct?q=${btnClicked}&limit=1&appid=${APIKey}`;
+
+    //     fetch(latLonAPI)
+    //         .then(function(response){
+    //         // console.log(response)
+    //         if(response.ok) {
+    //             return response.json();
+    //         } 
+    //         // else {
+    //         //     // alert("error") //fix
+    //         // }
+    //         })
+    //         .then(function (response) {
+    //         console.log(response)
+    
+    //         let lat = response[0].lat // "stores" response in variable
+    //         let lon = response[0].lon
+    //         let cityName = response[0].name
+    //         console.log(lat, lon)
+    //         displaycityName(cityName);
+
+    //         let apiURL = `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude=minutely,hourly,alerts&units=imperial&appid=${APIKey}`;
+
+    //         fetch(apiURL)
+    //         .then(function(response){
+    //             // console.log(response)
+    //             return response.json()
+    //         })
+        
+    //         .then(function (response) {
+    //             console.log(response)
+    //             printResults(response);
+    //         })
+    //         })
+
+    // });
 }
 
 
  //displays city on webpage...// ask tutor about this function 
 function displaycityName(name) {
-    searchedCityEl.innerHTML = "";
+    currentWeatherEl.innerHTML = ""; //replace searchedCityEl with currentWeatherEl
     let cityNameEl = document.createElement("h2");
     cityNameEl.classList.add("#searched-city");
     cityNameEl.textContent = name;
-    searchedCityEl.append(cityNameEl);
+    currentWeatherEl.append(cityNameEl); //replace searchedCityEl with currentWeatherEl
+
 }
-
-//create function to render recently searched cities and make button
-function recentSearches(name) {
-    let userSearchHistory = document.createElement("li"); //global scope of local scope???
-    userSearchHistory.classList.add("list-group-item");
-    //create button for recent searches
-    let recentSearchButton = document.createElement("button");
-    recentSearchButton.textContent = name;
-    //add class to button
-    recentSearchButton.classList.add("recent-search-btn", "btn", "btn-secondary")
-    //append or add button to list
-    userSearchHistory.append(recentSearchButton);
-    //append new created element to search history element
-    searchHistoryEl.append(userSearchHistory);
-
-
-    recentSearchButton.addEventListener("click", function(event) {
-        event.preventDefault();
-        let btnClicked = event.target.textContent
-        console.log(btnClicked)
-        let latLonAPI = `http://api.openweathermap.org/geo/1.0/direct?q=${btnClicked}&limit=1&appid=${APIKey}`;
-
-        fetch(latLonAPI)
-            .then(function(response){
-            // console.log(response)
-            if(response.ok) {
-                return response.json();
-            } 
-            // else {
-            //     // alert("error") //fix
-            // }
-            })
-            .then(function (response) {
-            console.log(response)
-    
-            let lat = response[0].lat // "stores" response in variable
-            let lon = response[0].lon
-            let cityName = response[0].name
-            console.log(lat, lon)
-            displaycityName(cityName);
-
-            let apiURL = `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude=minutely,hourly,alerts&units=imperial&appid=${APIKey}`;
-
-            fetch(apiURL)
-            .then(function(response){
-                // console.log(response)
-                return response.json()
-            })
-        
-            .then(function (response) {
-                console.log(response)
-                // printResults(response);
-            })
-            })
-
-    });
-};
 
 //create function to display current weather conditions
 function printResults(currentWeatherConditions) {
@@ -201,8 +201,7 @@ function printResults(currentWeatherConditions) {
     currentUV.classList.add("card-text");
     currentUV.textContent = `UV Index: `;
     let uviColor = document.createElement("span");
-    currentUV.append(uviColor);
-    uviColor.textContent = currentWeatherConditions.current.uvi;
+    
 
     //if statment that changes the color of UV according to condition
     if (currentWeatherConditions.current.uvi > 7) {
@@ -212,12 +211,15 @@ function printResults(currentWeatherConditions) {
     } if (currentWeatherConditions.current.uvi > 0) {
         uviColor.classList.add("low");
     };
+    currentUV.append(uviColor);
+    uviColor.textContent = currentWeatherConditions.current.uvi;
     currentWeatherEl.append(currentUV);
     
 
     //five day forecast Section
     var forecastSection = document.createElement("div");
     forecastSection.classList.add("row");
+    fiveDayForecastEl.innerHTML = ""
     fiveDayForecastEl.append(forecastSection);
 
     for (let i=0; i < 5; i++) {
@@ -247,6 +249,7 @@ function printResults(currentWeatherConditions) {
         cardHumidity.textContent = `Humidity: ${currentWeatherConditions.daily[i + 1].humidity} %`;
         cardHumidity.classList.add("card-text");
 
+
         // let cardUV = document.createElement("p");
         // cardUV.textcontent = `UV Index: ${currentWeatherConditions.daily[i + 1].uvi.day}`;
         // cardUV.classList.add("card-text");
@@ -256,136 +259,68 @@ function printResults(currentWeatherConditions) {
         cardBody.append(cardDateEl, cardTemp, cardWind, cardHumidity);
         forecastEl.append(cardBody);
         forecastDiv.append(forecastEl);
+        // forecastSection.innerHTML = "";
         forecastSection.append(forecastDiv);
         
 
     }
 }
-    //create an array and loop through each day
-    //use cards
-    //append 5 day forcast
+
+//create function to render recently searched cities and make button
+// function recentSearches(name) {
+//     let userSearchHistory = document.createElement("li"); //global scope of local scope???
+//     userSearchHistory.classList.add("list-group-item");
+//     //create button for recent searches
+//     let recentSearchButton = document.createElement("button");
+//     recentSearchButton.textContent = name;
+//     //add class to button
+//     recentSearchButton.classList.add("recent-search-btn", "btn", "btn-secondary")
+//     //append or add button to list
+//     userSearchHistory.append(recentSearchButton);
+//     //append new created element to search history element
+//     searchHistoryEl.append(userSearchHistory);
 
 
+//     recentSearchButton.addEventListener("click", function(event) {
+//         event.preventDefault();
+//         let btnClicked = event.target.textContent
+//         console.log(btnClicked)
+//         let latLonAPI = `http://api.openweathermap.org/geo/1.0/direct?q=${btnClicked}&limit=1&appid=${APIKey}`;
 
-    //print weather from user search 
-// function printResults(currentWeatherResult) {
-//     console.log(currentWeatherResult);
-
-//     let date = currentWeatherResult.current.dt;
-//     console.log(date);
-//     let dateEl = document.createElement("h3");
-//     dateEl.textContent = moment(date, "X").format("M,D,YYYY");
-//     console.log(dateEl);
-
-//     currentWeatherEl.append(dateEl)
-
-// }
-
-//local storage
-//-------------------------------------------------------//
-
-
-// buttonEl.addEventListener("click", function() {
-// var searchTerm = inputEl.value;
-// callWeatherAPI(searchTerm);  //correct
-// searchHistoryEl.push(searchTerm)
-// localStorage.setItem("search", JSON.stringify(searchHistory));
-// renderSearchHistory();
-
-// });
-
-// clearEl.addEventListener("click",function() {
-//     searchHistory = [];
-//     renderSearchHistory();
-// })
-
-// function renderSearchHistory() {
-//     historyEl.innerHTML = "";
-//     for (let i=0; i < searchHistory.length; i++) {
-//         const historyItem = document.createElement("input");
-//     //.........
-//     historyItem.setAttribute("type", "text");
-//     historyItem.setAttribute("readonly", true);
-//     historyItem.setAttribute("class", "form-control d-block bg-white");
-//     historyItem.setAttribute("value", searchHistory[i]);
-//     historyItem.setAttribute("click", function() {
-//         getweather(historyItem.value);
-//     })
-    
-//     }
-    
-// }
-
-// function renderSearchHistory() {
-//     historyEl.innerHTML = "";
-//     for (let i=0; i<searchHistory.length; i++) {
-//         const historyItem = document.createElement("input");
-//         // <input type="text" readonly class="form-control-plaintext" id="staticEmail" value="email@example.com"></input>
-//         historyItem.setAttribute("type","text");
-//         historyItem.setAttribute("readonly",true);
-//         historyItem.setAttribute("class", "form-control d-block bg-white");
-//         historyItem.setAttribute("value", searchHistory[i]);
-//         historyItem.addEventListener("click",function() {
-//             getWeather(historyItem.value);
-//         })
-//         historyEl.append(historyItem);
-//     }
-// } 
-
-// renderSearchHistory();
-// if (searchHistory.length > 0) {
-//     getWeather(searchHistory[searchHistory.length - 1])
-// }
-
-//---------------
-
-// var searchHistoryList = []; // var = array
-
-// buttonEl.addEventListener("click", function(event){
-//     event.preventDefault();
-
-//     var city = inputEl.value.trim(); //var city is equal to user input
-//     currentWeatherConditions(city); // (callapifunction)
-
-//     if(!searchHistoryList.includes(city)) {
-//         searchHistoryList.push(city);
-//         var searchedCity = document.querySelector(`<li class="list-group-item">${city}</li>`);
-//         document.querySelector("#search-history").append(searchedCity); // this is refrencing html id. (<ul id="searchHistory" class="list-group">)
-
-//     };
-
-//     localStorage.setItem("city",JSON.stringify(searchHistoryList));
-//     console.log(searchHistoryList)
-// });
-
-// $(document).on("click", ".list-group-item", function() { //document.querySelector(document).addEventListener("click","list-group-item", ListCity)
-//     var listCity = $(this).textContent();
-//     currentCondition(listCity);
-// });
-
-
-
-
-// var cityStorage = JSON.parse(localStorage.getItem("city"));
-
-//         if (JSON.parse(localStorage.getItem("city"))) {
-//             console.log("inside if",cityStorage);
-//             // var cityStorageObject = JSON.parse(localStorage.getItem("city"));
-//             //if greater than 5 then will be removed
-//             // if (cityStorageObject.length > 5) {
-//             //     cityStorageObject.pop(); 
-//             //     cityStorage.unshift(citySearch);
-//             // }else{
-//             //     cityStorage.unshift(citySearch);
+//         fetch(latLonAPI)
+//             .then(function(response){
+//             // console.log(response)
+//             if(response.ok) {
+//                 return response.json();
+//             } 
+//             // else {
+//             //     // alert("error") //fix
 //             // }
-//         }else{
-//             var searchHistoryList = [];
-//             searchHistoryList.push(cityStorage)
-//             localStorage.setItem("city", JSON.stringify(searchHistoryList)); //changed (temp) to (city)
+//             })
+//             .then(function (response) {
+//             console.log(response)
+    
+//             let lat = response[0].lat // "stores" response in variable
+//             let lon = response[0].lon
+//             let cityName = response[0].name
+//             console.log(lat, lon)
+//             displaycityName(cityName);
 
-//             searchHistoryEl.innerHTML = searchHistoryList;
-//             console.log("inside of else state search historyEl",searchHistoryEl);
+//             let apiURL = `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude=minutely,hourly,alerts&units=imperial&appid=${APIKey}`;
 
-//         } 
+//             fetch(apiURL)
+//             .then(function(response){
+//                 // console.log(response)
+//                 return response.json()
+//             })
+        
+//             .then(function (response) {
+//                 console.log(response)
+//                 // printResults(response);
+//             })
+//             })
+
+//     });
+// };
 
 

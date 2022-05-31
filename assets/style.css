@@ -28,12 +28,12 @@ main {
 .search-container {
     border: 1px solid black;
     flex: 1;
-    background-color: antiquewhite;
+    background-color: rgb(9, 81, 152);
     padding: 0 10px;
     height: 100vh;
 }
 
-.search-bar {
+#search-input {
     width: 100%;
 }
 
@@ -63,4 +63,16 @@ main {
 .five-day-forecast {
     border: 1px solid #888;
     height: 45%;
+}
+
+.low {
+    background-color: green;
+}
+
+.moderate {
+    background-color: yellow;
+}
+
+.extreme {
+    background-color: red;
 }
