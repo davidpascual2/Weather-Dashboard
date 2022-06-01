@@ -323,4 +323,4 @@ function printResults(currentWeatherConditions) {
 //     });
 // };
 
-
+// console.log("hello")
