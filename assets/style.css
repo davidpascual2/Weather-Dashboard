@@ -44,6 +44,7 @@ main {
 /* -------------------------------------- */
 
 .weather-container {
+    background-color: #999;
     display: flex;
     flex-direction: column;
     justify-content:space-around;
@@ -63,6 +64,10 @@ main {
 .five-day-forecast {
     border: 1px solid #888;
     height: 45%;
+}
+
+.card-body{
+    background-color: #e0c308;
 }
 
 .low {

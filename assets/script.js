@@ -182,6 +182,11 @@ function displaycityName(name) {
 function printResults(currentWeatherConditions) {
     console.log(currentWeatherConditions);
 
+    let weatherIcon = currentWeatherConditions.current.weather[0].icon;
+    let weatherIconEl = document.createElement("img");
+    weatherIconEl.src = `http://openweathermap.org/img/wn/${weatherIcon}@2x.png`; 
+    currentWeatherEl.append(weatherIconEl);
+
     let currentTemp = document.createElement("p");
     currentTemp.classList.add("card-text");
     currentTemp.textContent = `Temp: ${currentWeatherConditions.current.temp} F`;
@@ -237,12 +242,17 @@ function printResults(currentWeatherConditions) {
         cardDateEl.textContent = moment(cardDate, "X").format("M/D/YYYY");
         cardDateEl.classList.add("card-title")
 //--------------------------------------------------------------------//
+        let cardIcon = currentWeatherConditions.daily[i + 1].weather[0].icon;
+        let cardIconEl = document.createElement("img");
+        cardIconEl.src = `http://openweathermap.org/img/wn/${cardIcon}@2x.png`;
+        // cardIcon.classList.add("card-text")
+
         let cardTemp = document.createElement("p")
         cardTemp.textContent = `temp: ${currentWeatherConditions.daily[i + 1].temp.day} F`;
         cardTemp.classList.add("card-text");
 
         let cardWind = document.createElement("p");
-        cardWind.textContent = `Wind speed: ${currentWeatherConditions.daily[i + 1].wind_speed} mph`;
+        cardWind.textContent = `Wind: ${currentWeatherConditions.daily[i + 1].wind_speed} mph`;
         cardWind.classList.add("card-text"); // why is day not needed?
 
         let cardHumidity = document.createElement("p");
@@ -256,7 +266,7 @@ function printResults(currentWeatherConditions) {
 
 
 
-        cardBody.append(cardDateEl, cardTemp, cardWind, cardHumidity);
+        cardBody.append(cardDateEl, cardIconEl, cardTemp, cardWind, cardHumidity);
         forecastEl.append(cardBody);
         forecastDiv.append(forecastEl);
         // forecastSection.innerHTML = "";
