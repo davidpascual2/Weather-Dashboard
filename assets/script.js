@@ -57,7 +57,7 @@ function callWeatherAPI(event) {
         
     
 
-    let latLonAPI = `http://api.openweathermap.org/geo/1.0/direct?q=${citySearch}&limit=1&appid=${APIKey}`;
+    let latLonAPI = `https://api.openweathermap.org/geo/1.0/direct?q=${citySearch}&limit=1&appid=${APIKey}`;
 
     fetch(latLonAPI)
         .then(function(response){
@@ -184,7 +184,7 @@ function printResults(currentWeatherConditions) {
 
     let weatherIcon = currentWeatherConditions.current.weather[0].icon;
     let weatherIconEl = document.createElement("img");
-    weatherIconEl.src = `http://openweathermap.org/img/wn/${weatherIcon}@2x.png`; 
+    weatherIconEl.src = `https://openweathermap.org/img/wn/${weatherIcon}@2x.png`; 
     currentWeatherEl.append(weatherIconEl);
 
     let currentTemp = document.createElement("p");
@@ -244,7 +244,7 @@ function printResults(currentWeatherConditions) {
 //--------------------------------------------------------------------//
         let cardIcon = currentWeatherConditions.daily[i + 1].weather[0].icon;
         let cardIconEl = document.createElement("img");
-        cardIconEl.src = `http://openweathermap.org/img/wn/${cardIcon}@2x.png`;
+        cardIconEl.src = `https://openweathermap.org/img/wn/${cardIcon}@2x.png`;
         // cardIcon.classList.add("card-text")
 
         let cardTemp = document.createElement("p")
